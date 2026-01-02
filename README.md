@@ -1,21 +1,17 @@
-*This project has been created as part of the 42 curriculum by mgodawat.*
+*This project has been created as part of the 42 curriculum by mgodawat. Its an exercise to broaden system administrative skills of the student using Docker.*
 
 ## 1. Description
+The goal of this project is to create a secure, automated web-hosting environment using **Docker**. My infrastructure follows a **microservices-oriented architecture** where each component is isolated.
 
-*
-**Goal:** Briefly explain the primary objective of the Inception project.
+**Microservices-oriented architecture** is a design style where a single application is built using small independent components. Each of these components run its own processes and communicate with others using lightweight mechanism, typically an API (like HTTP/REST) So instead of building one giant application where everything is mixed together, we can break the system into small independent pieces and make them work together.
 
-
-*
-**Overview:** Provide a high-level summary of the infrastructure you are building.
+The technology that creates these independent containers known as **Docker**. Its a lightweight "isolated box" that holds only what necessary for that specific service to run
 
 
-*
-**Docker Usage:** Explain why Docker is being used for this specific set of services.
+
+At the front, I have configured **NGINX** to act as a secure gateway, accepting only encrypted traffic via **TLSv1.2/v1.3**. This gateway communicates internally with a **Wordpress** container (powered by php-fpm) and **MariaDB** database.
 
 
-*
-**Included Sources:** List and describe the sources/folders included in your repository (e.g., the `srcs` folder).
 
 
 
