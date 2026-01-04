@@ -1,40 +1,26 @@
 *This project has been created as part of the 42 curriculum by mgodawat. Its an exercise to broaden system administrative skills of the student using Docker.*
 
 ## 1. Description
-The goal of this project is to create a secure, automated web-hosting environment using **Docker**. My infrastructure follows a **microservices-oriented architecture** where each component is isolated.
+The goal of this project is to build a web-hosting service. We have a functional dynamic website powered by WordPress and we need a place for this website to sit and listen until a user calls for it from their browser.
 
-**Microservices-oriented architecture** is a design style where a single application is built using small independent components. Each of these components run its own processes and communicate with others using lightweight mechanism, typically an API (like HTTP/REST) So instead of building one giant application where everything is mixed together, we can break the system into small independent pieces and make them work together.
+Web hosting service will contains all the technologies that will serve to funtion the website properly and those are **WordPress, php-fpm(engine required by WordPress), MariaDB(database), NGINX(A web server that acts as a secure gatekeeper)**
 
-The technology that creates these independent containers known as **Docker**. Its a lightweight "isolated box" that holds only what necessary for that specific service to run
+The web hosting service will be built on a **virtual machine** as the bass layer. Of course we gonna be needing an OS to run in out virtual machine and that will be in my case **Debian**. After that we have to intall **Docker** which will help us to put pack all the technologies I mentioned above that we need for to run the website into containers. We can talk about this more later.
 
-
-
-At the front, I have configured **NGINX** to act as a secure gateway, accepting only encrypted traffic via **TLSv1.2/v1.3**. This gateway communicates internally with a **Wordpress** container (powered by php-fpm) and **MariaDB** database.
-
-
-
-
+![alt text](/assests/img1.png "Inception")
 
 ## 2. Project Design Choices & Technical Comparisons
 
-This is a critical section for your peer evaluations. You must provide a clear comparison and justify your choices for the following:
+**Virtual Machines vs. Docker**
+Virtual machines virtualizes the hardward while docker virtualizes the operating system.
+Docker is lightweight and fast compared to virtual machines. Here's a video that helped me to understand this concept better https://www.youtube.com/watch?v=eGz9DS-aIeY&t=888s
 
-*
-**Virtual Machines vs. Docker:** What are the fundamental differences in how they handle resources and isolation?
 
-
-*
 **Secrets vs. Environment Variables:** Why is it mandatory to use secrets for passwords instead of just `.env` files or Dockerfiles?
 
-
-*
 **Docker Network vs. Host Network:** Why is `network: host` forbidden in this project, and how does the internal Docker network improve security?
 
-
-*
 **Docker Volumes vs. Bind Mounts:** Explain the difference in how data is managed and why volumes were chosen for WordPress and MariaDB.
-
-
 
 ## 3. Instructions
 
