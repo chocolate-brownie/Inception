@@ -13,7 +13,7 @@ The web hosting service will be built on a **virtual machine** as the bass layer
 
 **Virtual Machines vs. Docker**
 Virtual machines virtualizes the hardward while docker virtualizes the operating system.
-Docker is lightweight and fast compared to virtual machines. Here's a video that helped me to understand this concept better https://www.youtube.com/watch?v=eGz9DS-aIeY&t=888s
+Docker is lightweight and fast compared to virtual machines.
 
 
 **Secrets vs. Environment Variables:** Why is it mandatory to use secrets for passwords instead of just `.env` files or Dockerfiles?
