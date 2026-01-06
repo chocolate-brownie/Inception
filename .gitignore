@@ -1,0 +1,22 @@
+# --- SENSITIVE DATA ---
+# Never commit your environment variables or passwords!
+.env
+*/*.env
+secrets/
+
+# --- DATA & VOLUMES ---
+# Ignore the data folders that Docker volumes mount to.
+# Based on your DEV_DOC.md, these live in /home/login/data
+# If you have a local 'data' folder for testing, ignore it here.
+data/
+
+# --- IDE & TOOLS ---
+# Ignore VS Code settings (as seen in your file list)
+.vscode/
+
+# --- OS SPECIFIC ---
+.DS_Store
+Thumbs.db
+
+# --- LOGS ---
+*.log
