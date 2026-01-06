@@ -21,11 +21,11 @@ Since docker is virtualizing the application layer of the OS (while vm is doing 
 
 ### Docker Architecture
 ![alt text](/assests/img3.png "Docker Architecture")
-Docker engine is the heart of the heart of the docker platform. It has two components. First component is the **docker daemon (dockerd)** its the process that runs on top of the host os and responsible for managing all the docker components. The second one is CLI tool called **docker client** which allows you interact with the dockerd using the command line. The user can ``build``, ``run``, ``stop`` and manage docker containers.
+Docker engine is the heart of the heart of the docker platform. It has two components. First component is the **docker daemon (dockerd)** its the process that runs on top of the host os and responsible for managing all the docker components. The second one is CLI tool called **docker client** which allows you interact with the dockerd using the command line. The user can ``build``, ``run``, ``stop`` and manage docker containers. The CLI can talk to the dockerd thanks to something called REST API.
 
-On top of this docker engine we have **docker images**, docker images can be equals to the count of docker containers that we will create so each container have its own docker image. The docker images are the building blocks of the containers. They are red-only templates that contain the application's code, runtime, system tools and other dependencies. It's a snapshot in time. It's like a photo of computer's hard-drive at the exact moment your softwares were installed and configured perfectly. Because it is "immutable" (unchangeable), every time you start a container from that photo, it starts in that exact same perfect state.
+On top of this docker engine we have **docker images**, docker images can be equal to the count of docker containers that we will create so each container have its own docker image. The docker images are the building blocks of the containers. They are read-only templates that contain the application's code, runtime, system tools and other dependencies. It's a snapshot in time. It's like a photo of computer's hard-drive at the exact moment your softwares were installed and configured perfectly. Because it is "immutable" (unchangeable), every time you start a container from that photo, it starts in that exact same perfect state.
 
-Docker images are created with something called a **docker file** each docker image has a docker file which is a text files containing the instructions for building the image layer by layer. Here's an example of how a dockerfile looks like.
+Docker images are created with something called a **docker file** each docker image has a docker file which is a text files containing the instructions for building the image layer by layer. Here's an example of how a dockerfile looks like for building a NGINX server container
 
 ```dockerfile
 # 1. The Foundation: Start with the Debian "floor"
