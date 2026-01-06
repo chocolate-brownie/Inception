@@ -15,6 +15,8 @@ The web hosting service will be built on a **virtual machine** as the bass layer
 Virtual machines virtualizes the hardware while docker virtualizes the operating system.
 Docker is lightweight and fast compared to virtual machines.
 
+Since docker is virtualizing the application layer of the OS (while vm is doing both os kernel and application layer) it is significantly faster compared to the vms. Docker uses its host os as a bass and able to create these things called **containers** where each container is its own thing as far as it concerns and each container that exist on top of the docker engine do not know about each other. This makes the containers very quarantine and they do not clash with each other whatsoever. Here's a simple diagram to demonstrate my understanding further.
+
 ![alt text](/assests/img2.png "VM vs Docker")
 
 **Secrets vs. Environment Variables:** Why is it mandatory to use secrets for passwords instead of just `.env` files or Dockerfile?
