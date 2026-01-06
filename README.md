@@ -1,23 +1,48 @@
 *This project has been created as part of the 42 curriculum by mgodawat. Its an exercise to broaden system administrative skills of the student using Docker.*
 
 ## 1. Description
+![alt text](/assests/img1.png "Inception")
 The goal of this project is to build a web-hosting service. We have a functional dynamic website powered by WordPress and we need a place for this website to sit and listen until a user calls for it from their browser.
 
 Web hosting service will contains all the technologies that will serve to function the website properly and those are **WordPress, php-fpm(engine required by WordPress), MariaDB(database), NGINX(A web server that acts as a secure gatekeeper)**
 
 The web hosting service will be built on a **virtual machine** as the bass layer. Of course we gonna be needing an OS to run in out virtual machine and that will be in my case **Debian**. After that we have to install **Docker** which will help us to put pack all the technologies I mentioned above that we need for to run the website into containers. We can talk about this more later.
 
-![alt text](/assests/img1.png "Inception")
 
 ## 2. Project Design Choices & Technical Comparisons
 
 **Virtual Machines vs. Docker**
+![alt text](/assests/img2.png "VM vs Docker")
 Virtual machines virtualizes the hardware while docker virtualizes the operating system.
 Docker is lightweight and fast compared to virtual machines.
 
-Since docker is virtualizing the application layer of the OS (while vm is doing both os kernel and application layer) it is significantly faster compared to the vms. Docker uses its host os as a bass and able to create these things called **containers** where each container is its own thing as far as it concerns and each container that exist on top of the docker engine do not know about each other. This makes the containers very quarantine and they do not clash with each other whatsoever. Here's a simple diagram to demonstrate my understanding further.
+Since docker is virtualizing the application layer of the OS (while vm is doing both os kernel and application layer) it is significantly faster compared to the vms. Docker uses its host's os as a bass and able to create these things called **containers** where each container is its own thing as far as it concerns and each container that exist on top of the docker engine do not know about each other. This makes the containers very quarantine and they do not clash with each other whatsoever. Here's a simple diagram to demonstrate my understanding further.
 
-![alt text](/assests/img2.png "VM vs Docker")
+
+### Docker Architecture
+![alt text](/assests/img3.png "Docker Architecture")
+Docker engine is the heart of the heart of the docker platform. It has two components. First component is the **docker daemon (dockerd)** its the process that runs on top of the host os and responsible for managing all the docker components. The second one is CLI tool called **docker client** which allows you interact with the dockerd using the command line. The user can ``build``, ``run``, ``stop`` and manage docker containers.
+
+On top of this docker engine we have **docker images**, docker images can be equals to the count of docker containers that we will create so each container have its own docker image. The docker images are the building blocks of the containers. They are red-only templates that contain the application's code, runtime, system tools and other dependencies. It's a snapshot in time. It's like a photo of computer's hard-drive at the exact moment your softwares were installed and configured perfectly. Because it is "immutable" (unchangeable), every time you start a container from that photo, it starts in that exact same perfect state.
+
+Docker images are created with something called a **docker file** each docker image has a docker file which is a text files containing the instructions for building the image layer by layer. Here's an example of how a dockerfile looks like.
+
+```dockerfile
+# 1. The Foundation: Start with the Debian "floor"
+FROM debian:bullseye
+
+# 2. Preparation: Update the system and install NGINX
+RUN apt-get update && apt-get install -y nginx openssl && rm -rf /var/lib/apt/lists/*
+
+# 3. Customization: Copy your configuration file into the "room"
+COPY conf/nginx.conf /etc/nginx/nginx.conf
+
+# 4. Networking: Tell the engine which "window" to open (HTTPS)
+EXPOSE 443
+
+# 5. Execution: The command that keeps the container "awake"
+CMD ["nginx", "-g", "daemon off;"]
+```
 
 **Secrets vs. Environment Variables:** Why is it mandatory to use secrets for passwords instead of just `.env` files or Dockerfile?
 
