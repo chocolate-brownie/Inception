@@ -44,6 +44,10 @@ EXPOSE 443
 CMD ["nginx", "-g", "daemon off;"]
 ```
 
+Then we have our **containers** which we can build thanks to our docker images(+docker files). Docker containers are runnable instances of docker images. They encapsulates the application and its dependencies, providing an isolated environment for execution.
+
+We also have another tool called **docker composer** which lives outside the of the docker engine (it's the thing I have drawn as a stripped blue box) even though its not a part of the main docker engine its essential to the orchestral of the docker engine. Its a tool that lives on our host OS (in our case debian) and acts as the mission commander for the entire project. Using the ``docker-compose.yml``(instructions) it can instructs the containers on how they should act, whether they should run, build stop or do whatever.
+
 **Secrets vs. Environment Variables:** Why is it mandatory to use secrets for passwords instead of just `.env` files or Dockerfile?
 
 **Docker Network vs. Host Network:** Why is `network: host` forbidden in this project, and how does the internal Docker network improve security?
@@ -53,7 +57,7 @@ CMD ["nginx", "-g", "daemon off;"]
 ## 3. Instructions
 
 *
-**Compilation/Build:** Explain the role of your `Makefile` and how it interacts with `docker-compose.yml` to build images from your `Dockerfiles`.
+**Compilation/Build:** Explain the role of your `Makefile` and how it interacts with `docker-compose.yml` to build images from your `Docker files`.
 
 
 *
