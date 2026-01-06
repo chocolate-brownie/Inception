@@ -3,20 +3,21 @@
 ## 1. Description
 The goal of this project is to build a web-hosting service. We have a functional dynamic website powered by WordPress and we need a place for this website to sit and listen until a user calls for it from their browser.
 
-Web hosting service will contains all the technologies that will serve to funtion the website properly and those are **WordPress, php-fpm(engine required by WordPress), MariaDB(database), NGINX(A web server that acts as a secure gatekeeper)**
+Web hosting service will contains all the technologies that will serve to function the website properly and those are **WordPress, php-fpm(engine required by WordPress), MariaDB(database), NGINX(A web server that acts as a secure gatekeeper)**
 
-The web hosting service will be built on a **virtual machine** as the bass layer. Of course we gonna be needing an OS to run in out virtual machine and that will be in my case **Debian**. After that we have to intall **Docker** which will help us to put pack all the technologies I mentioned above that we need for to run the website into containers. We can talk about this more later.
+The web hosting service will be built on a **virtual machine** as the bass layer. Of course we gonna be needing an OS to run in out virtual machine and that will be in my case **Debian**. After that we have to install **Docker** which will help us to put pack all the technologies I mentioned above that we need for to run the website into containers. We can talk about this more later.
 
 ![alt text](/assests/img1.png "Inception")
 
 ## 2. Project Design Choices & Technical Comparisons
 
 **Virtual Machines vs. Docker**
-Virtual machines virtualizes the hardward while docker virtualizes the operating system.
+Virtual machines virtualizes the hardware while docker virtualizes the operating system.
 Docker is lightweight and fast compared to virtual machines.
 
+![alt text](/assests/img2.png "VM vs Docker")
 
-**Secrets vs. Environment Variables:** Why is it mandatory to use secrets for passwords instead of just `.env` files or Dockerfiles?
+**Secrets vs. Environment Variables:** Why is it mandatory to use secrets for passwords instead of just `.env` files or Dockerfile?
 
 **Docker Network vs. Host Network:** Why is `network: host` forbidden in this project, and how does the internal Docker network improve security?
 
