@@ -48,7 +48,15 @@ Then we have our **containers** which we can build thanks to our docker images(+
 
 We also have another tool called **docker composer** which lives outside the of the docker engine (it's the thing I have drawn as a stripped blue box) even though its not a part of the main docker engine its essential to the orchestral of the docker engine. Its a tool that lives on our host OS (in our case debian) and acts as the mission commander for the entire project. Using the ``docker-compose.yml``(instructions) it can instructs the containers on how they should act, whether they should run, build stop or do whatever.
 
-**Secrets vs. Environment Variables:** Why is it mandatory to use secrets for passwords instead of just `.env` files or Dockerfile?
+### Secrets vs. Environment Variables
+
+**Why is it mandatory to use secrets for passwords instead of just `.env` files or Dockerfile?**
+
+`.env` (metadata) files are part of the container's configuration. Anyone with access to the docker engine can see them in plain text just by "inspecting (`docker inspect`)" the container. Inside the container any process can often see the environmental variables of the other processes. If one small part of your system is hacked, the attacker can simply check the "environment" of the running processes to steal your password. Also if your application crashes, the system often "dumps" all environment variables into a log file to help with debugging, accidentally writing your password onto the disk in a non-secure location.
+
+Also Dockerfiles are built in layers. Every command you write is baked into a read-only layer. Even if you try to delete a password in a later step, it remains permanently stored in the image history. Anyone with the image can run `docker history <image name>` and see exactly what was written in the previous layers. So using `ENV` and `ARG` for storing sensitive data is a NO-GO!
+
+The solution is **Docker secrets** (memory-only files). It is specifically designed and managed by the docker engine to store sensitive information (database passwords, SSH keys etc) outside of your application's images and source code. Secrets are not stored as environment variables. Instead, they are mounted as temporary files at `/run/secrets/<secret_name>`. These files live only in the container's RAM; they are never written to the physical hard drive and disappear the moment the container stops
 
 **Docker Network vs. Host Network:** Why is `network: host` forbidden in this project, and how does the internal Docker network improve security?
 
