@@ -58,7 +58,13 @@ Also Dockerfiles are built in layers. Every command you write is baked into a re
 
 The solution is **Docker secrets** (memory-only files). It is specifically designed and managed by the docker engine to store sensitive information (database passwords, SSH keys etc) outside of your application's images and source code. Secrets are not stored as environment variables. Instead, they are mounted as temporary files at `/run/secrets/<secret_name>`. These files live only in the container's RAM; they are never written to the physical hard drive and disappear the moment the container stops
 
-**Docker Network vs. Host Network:** Why is `network: host` forbidden in this project, and how does the internal Docker network improve security?
+### Docker Network vs. Host Network
+
+**Why is `network: host` forbidden in this project, and how does the internal Docker network improve security?**
+
+`network: host` is forbidden because it breaks the fundamental goal of the project: creating a secure, tiered architecture. The reason is whe you use `network: host`, the container does not get its own IP address or isolated network space. Instead **it sits directly on the host's network**
+
+The "Internal Docker Network" creates a virtual, private "LAN" where our containers can talk to each other while remaining completely invisible to the host's network and the internet. Instead of each container being on its own "little" network, they share one private internal network so they can communicate. Only NGINX has a specific "door" (Port 443) opened to the host; the other containers stay hidden inside this private space where they are protected from direct attacks.
 
 **Docker Volumes vs. Bind Mounts:** Explain the difference in how data is managed and why volumes were chosen for WordPress and MariaDB.
 
