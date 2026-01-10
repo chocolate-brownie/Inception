@@ -49,7 +49,7 @@ Then we have our **containers** which we can build thanks to our docker images(+
 We also have another tool called **docker composer** which lives outside the of the docker engine (it's the thing I have drawn as a stripped blue box) even though its not a part of the main docker engine its essential to the orchestral of the docker engine. Its a tool that lives on our host OS (in our case debian) and acts as the mission commander for the entire project. Using the ``docker-compose.yml``(instructions) it can instructs the containers on how they should act, whether they should run, build stop or do whatever.
 
 ### Secrets vs. Environment Variables
-
+![alt text](/assests/img4.png "Secrets vs Environmental Variables")
 **Why is it mandatory to use secrets for passwords instead of just `.env` files or Dockerfile?**
 
 `.env` (metadata) files are part of the container's configuration. Anyone with access to the docker engine can see them in plain text just by "inspecting (`docker inspect`)" the container. Inside the container any process can often see the environmental variables of the other processes. If one small part of your system is hacked, the attacker can simply check the "environment" of the running processes to steal your password. Also if your application crashes, the system often "dumps" all environment variables into a log file to help with debugging, accidentally writing your password onto the disk in a non-secure location.
@@ -59,7 +59,7 @@ Also Dockerfiles are built in layers. Every command you write is baked into a re
 The solution is **Docker secrets** (memory-only files). It is specifically designed and managed by the docker engine to store sensitive information (database passwords, SSH keys etc) outside of your application's images and source code. Secrets are not stored as environment variables. Instead, they are mounted as temporary files at `/run/secrets/<secret_name>`. These files live only in the container's RAM; they are never written to the physical hard drive and disappear the moment the container stops
 
 ### Docker Network vs. Host Network
-
+![alt text](/assests/img5.png "Docker Network vs Host Network")
 **Why is `network: host` forbidden in this project, and how does the internal Docker network improve security?**
 
 `network: host` is forbidden because it breaks the fundamental goal of the project: creating a secure, tiered architecture. The reason is whe you use `network: host`, the container does not get its own IP address or isolated network space. Instead **it sits directly on the host's network**
@@ -67,7 +67,7 @@ The solution is **Docker secrets** (memory-only files). It is specifically desig
 The "Internal Docker Network" creates a virtual, private "LAN" where our containers can talk to each other while remaining completely invisible to the host's network and the internet. Instead of each container being on its own "little" network, they share one private internal network so they can communicate. Only NGINX has a specific "door" (Port 443) opened to the host; the other containers stay hidden inside this private space where they are protected from direct attacks.
 
 ### Docker Volumes vs. Bind Mounts
-
+![alt text](/assests/img6.png "Docker Volumes vs Bind Mounts")
 **Explain the difference in how data is managed and why volumes were chosen for WordPress and MariaDB**
 
 With **Bind Mounts** the database files are stored in a specific location on host. We might accidentally delete them during a clean up, other programs on our host can access and modify them and backing up means copying that exact folder structure.
@@ -97,18 +97,17 @@ With a simple bind mount `/home/mgodawat/data/mariadb` we would have to use trad
 
 ## 3. Instructions
 
-*
-**Compilation/Build:** Explain the role of your `Makefile` and how it interacts with `docker-compose.yml` to build images from your `Docker files`.
+### Compilation/Build
 
+**Explain the role of your `Makefile` and how it interacts with `docker-compose.yml` to build images from your `Docker files`.**
 
-*
-**Installation:** Are there any prerequisites needed on the host Virtual Machine before running the project?
+### Installation
 
+**Are there any prerequisites needed on the host Virtual Machine before running the project?**
 
-*
-**Execution:** Provide the exact commands to start and stop the entire infrastructure.
+### Execution
 
-
+**Provide the exact commands to start and stop the entire infrastructure.**
 
 ## 4. Resources & AI Usage
 
