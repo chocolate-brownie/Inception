@@ -66,7 +66,34 @@ The solution is **Docker secrets** (memory-only files). It is specifically desig
 
 The "Internal Docker Network" creates a virtual, private "LAN" where our containers can talk to each other while remaining completely invisible to the host's network and the internet. Instead of each container being on its own "little" network, they share one private internal network so they can communicate. Only NGINX has a specific "door" (Port 443) opened to the host; the other containers stay hidden inside this private space where they are protected from direct attacks.
 
-**Docker Volumes vs. Bind Mounts:** Explain the difference in how data is managed and why volumes were chosen for WordPress and MariaDB.
+### Docker Volumes vs. Bind Mounts
+
+**Explain the difference in how data is managed and why volumes were chosen for WordPress and MariaDB**
+
+With **Bind Mounts** the database files are stored in a specific location on host. We might accidentally delete them during a clean up, other programs on our host can access and modify them and backing up means copying that exact folder structure.
+
+```dockerfile
+docker run -v /home/mgodawat/data:/var/www/html wordpress
+```
+Left side `/home/mgodawat/data` is the exact path on YOUR computer. Right side `/var/www/html` is the path inside the container. Docker just creates a tunnel between these two exact locations. The problem is if you give this to a friend, their computer doesn't have `/home/mgodawat/data`
+
+**Docker Volumes** in the other hand would be something like this where docker decides where to actually store the data instead we manually doing it. Since docker manages them its portable and can work anywhere. With Docker volumes we can easily creates backups, other programs on your host cant accidentally mess with them.
+
+```dockerfile
+docker volume create wp_data
+docker run -v wp_data:/var/www/html wordpress
+```
+
+So in simple terms bind mounts are like fixing storage to a specific location, while volumes are like having a managed storage service.
+
+So to answer the question lets imagine a scenario where our wordpress site gets 10,000 visitors and the database needs optimization. As a system administrator we would have to
+
+* Easily migrate the database to faster storage
+* Set up automated backups
+* Monitor disk usage
+* Apply security permissions
+
+With a simple bind mount `/home/mgodawat/data/mariadb` we would have to use traditional linux tools for everything, manually handle permissions, write custom backups With docker volume `mariadb_data` you can `docker volume inspect mariadb_data to see usage`, use Docker's backup utilities, change storage drivers without touching your app and let Docker handle UID/GID mapping
 
 ## 3. Instructions
 
