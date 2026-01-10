@@ -101,50 +101,90 @@ With a simple bind mount `/home/mgodawat/data/mariadb` we would have to use trad
 
 **Explain the role of your `Makefile` and how it interacts with `docker-compose.yml` to build images from your `Docker files`.**
 
+Compilation and built relationship would look something like,
+`Makefile` → calls → `docker-compose.yml` → builds from → `Dockerfiles`
+
+`make` is a general build/task automation tool driven by a Makefile. While `docker-compose` is specifically about creating and starting docker containers define in the `docker-compose.yml` file.
+
+`make` executes the targets in the Makefile, which can invoke `docker compose` commands that parse the `docker-compose.yml` to build images from Dockerfiles and start containers
+
+* Makefile: Acts as the project's command center, providing consistent, memorable commands (make, make clean, make re)
+* docker-compose.yml: Defines the multi-container architecture and their relationships
+* Dockerfiles: Provide service-specific build instructions for each container
+
+Example makefile structure
+```Makefile
+all:			up		# Default: build and start everything
+
+build:
+	@docker-compose -f srcs/docker-compose.yml build --no-cache
+
+up:
+	@docker-compose -f srcs/docker-compose.yml up -d
+
+down:
+	@docker-compose -f srcs/docker-compose.yml down
+
+clean:			down	# Stop and remove containers
+	@docker system prune -af --volumes
+	@sudo rm -rf /home/mgodawat/data/*
+
+re:				clean all	# Complete rebuild
+```
+
 ### Installation
 
-**Are there any prerequisites needed on the host Virtual Machine before running the project?**
+We would be needing these prerequisites before the execution.
+
+* Virtual Machine: Debian 11 (Bullseye)
+* Docker: Version 20.10.0 or higher
+* Docker Compose: Version 1.29.0 or higher (v2 recommended)
+* System Resources:
+    * 2+ GB RAM
+    * 10+ GB disk space
+    * 2 CPU cores minimum
+* Network Configuration:
+    * Domain name resolution (add to /etc/hosts)
+    * Port 443 available
 
 ### Execution
 
-**Provide the exact commands to start and stop the entire infrastructure.**
+``` bash
+git clone <your-repo>
+cd inception
+cp .env.example .env  # Edit with your values
+
+# Start
+make  # or make up
+
+# Check status
+docker-compose ps
+
+# View logs
+docker-compose logs -f
+
+# Stop
+make down
+```
 
 ## 4. Resources & AI Usage
 
-*
-**References:** List the documentation, articles, or tutorials you used (e.g., Docker or NGINX official docs).
+**References:**
 
+* [Virtual Machine (VM) vs Docker - IBM Technology](https://www.youtube.com/results?search_query=understand+docker+ibm)
 
-*
-**AI Disclosure:** * Which specific Al tools did you use?
+* [you need to learn Docker RIGHT NOW!! // Docker Containers 101](https://youtu.be/eGz9DS-aIeY?si=yoD2WB5IEzWDwQuS)
 
+* [Docker Crash Course for Absolute Beginners [NEW]](https://www.youtube.com/watch?v=pg19Z8LL06w&t=174s)
 
-* For which specific tasks and parts of the project was Al utilized?
+**AI Disclosure:**
 
+In this project I have used Gemini for breaking down the project into different parts and what kind of concepts I should learn about building plans and to-do lists to have a clear vision of what I should.
 
-* How did you verify that the Al-generated content was accurate and secure?
+Then I use DeepSeek to research about these topics in advance and use it as a cs-tutor. I like its logical approach when learning computer science related things. I would use Perplexity as an alternative to Google to read documentations or find them since we can trace the sources it finds information from and to confirm the ligeitamicy of the information that is given to me by other tools.
 
+In addition I used these tools to build the backbone structure of these documentation and propose me questions and to write them in advance so I can tackle one problem at a time and write the answers in my own words while doing research.
 
-
-
+I used Excalidraw to take notes as in infinite canvas style to draw diagrams and understand, I used Gemini's nano-banana to generate some pictures as well.
 
 ---
-
-### Peer Discussion Checklist
-
-When you are explaining your project to your peers, be prepared to answer these "why" questions based on the subject's rules:
-
-1.
-**Isolation:** Why must NGINX, WordPress, and MariaDB be in separate containers?
-
-
-2.
-**OS Choice:** Why did you choose Alpine or Debian, and why is the "latest" tag forbidden?
-
-
-3.
-**Entrypoint:** Why is the NGINX container the only allowed entry point (port 443)?
-
-
-4.
-**PID 1:** How did you ensure your containers don't run on infinite loops like `sleep infinity`?
