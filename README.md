@@ -185,6 +185,4 @@ Then I use DeepSeek to research about these topics in advance and use it as a cs
 
 In addition I used these tools to build the backbone structure of these documentation and propose me questions and to write them in advance so I can tackle one problem at a time and write the answers in my own words while doing research.
 
-I used Excalidraw to take notes as in infinite canvas style to draw diagrams and understand, I used Gemini's nano-banana to generate some pictures as well.
-
 ---
