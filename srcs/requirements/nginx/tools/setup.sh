@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# This is the Start-up Routine. Every time the container starts, this script 
+# runs to generate a fresh security certificate and then turns the NGINX server "On".
+
+
 # Create the folder for the SSL certificates
 mkdir -p /etc/nginx/ssl
 
