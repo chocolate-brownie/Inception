@@ -1,33 +1,25 @@
-# Project variables
-NAME		= inception
-SRCS		= ./srcs/docker-compose.yml
-DATA_PATH	= /home/mgodawat/data
+NAME        = inception
+SRCS        = ./srcs/docker-compose.yml
+DATA_PATH   = /home/mgodawat/data
 
-# Default target: builds and starts the containers
-all: build
-	@printf "Launching configuration ${NAME}...\n"
+all:
 	@mkdir -p $(DATA_PATH)/mariadb
 	@mkdir -p $(DATA_PATH)/wordpress
-	@docker compose -f $(SRCS) up -d
+	@docker compose -f $(SRCS) up -d --build
 
-# Build images from Dockerfiles
-build:
-	@printf "Building configuration ${NAME}...\n"
-	@docker compose -f $(SRCS) build
-
-# Stop and remove containers
 down:
-	@printf "Stopping configuration ${NAME}...\n"
 	@docker compose -f $(SRCS) down
 
-# Full cleanup: removes containers, images, and volumes
+# Standard clean: Stops containers but KEEPS data
 clean: down
-	@printf "Cleaning configuration ${NAME}...\n"
 	@docker system prune -af
+
+# Full clean: DELETES data (Use only when resetting project)
+fclean: clean
 	@sudo rm -rf $(DATA_PATH)/mariadb/*
 	@sudo rm -rf $(DATA_PATH)/wordpress/*
 
-# Complete reset and rebuild
+# Rebuilds containers without deleting database
 re: clean all
 
-.PHONY: all build down clean re
+.PHONY: all down clean fclean re
