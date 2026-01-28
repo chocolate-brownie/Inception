@@ -1,37 +1,21 @@
 ## Developer Documentation
 
-This file focuses on the **underlying architecture** and **environment setup**.
-
 ### I. Environment Setup
-
-**Prerequisites:** List the tools needed before building (e.g., Docker, Docker Compose, and a Virtual Machine).
-
-**Configuration Files:** Explain the purpose of the `.env` file and the `srcs` folder structure.
-
-**Secrets Management:** Describe how the project handles sensitive data using Docker Secrets rather than hardcoded passwords.
+* **Prerequisites:** This project requires a Virtual Machine running **Debian 11 (Bullseye)**, with **Docker** and the **Docker Compose** plugin installed.
+* **Configuration Files:** The project relies on a `.env` file at the root to store sensitive variables (DB passwords, admin credentials). The `srcs/` folder contains the `docker-compose.yml` and the `requirements/` subdirectories for each service's Dockerfile and configuration.
+* **Secrets Management:** While basic variables are in `.env`, the project avoids hardcoding passwords in Dockerfiles. During setup, environment variables are passed directly to the scripts to initialize the MariaDB user and WordPress database securely.
 
 ### II. Build and Deployment
-
-**The Makefile:** Explain how the `Makefile` automates the `docker-compose.yml` build process.
-
-**Build Commands:** List the commands used to build images from scratch using the custom Dockerfiles.
+* **The Makefile:** The `Makefile` at the root automates the entire lifecycle. Running `make` creates the necessary host directories, then calls `docker compose up --build`.
+* **Build Commands:** * `make`: Builds and starts all containers in detached mode.
+    * `make re`: Performs a `clean` and then rebuilds, useful for applying configuration changes without losing data.
 
 ### III. Container Management
-
-**Maintenance Commands:** Provide relevant commands for a developer to inspect logs, enter a container shell, or check network status.
-
-**Network Architecture:** Describe the internal Docker network that connects the containers while keeping them isolated from the host.
+* **Maintenance Commands:** * View Logs: `docker logs -f <container_name>`
+    * Shell Access: `docker exec -it <container_name> /bin/bash`
+    * Status: `docker compose ps`
+* **Network Architecture:** All containers are connected via a dedicated bridge network named `inception_net`. This provides internal DNS (services can find each other by name, e.g., `mariadb:3306`) while isolating the database from external host access.
 
 ### IV. Data Persistence and Volumes
-
-**Storage Location:** Identify the specific path on the host machine (`/home/login/data`) where the volumes are stored.
-
-**Persistence Logic:** Explain how the database and website files persist even if the containers are removed.
-
----
-
-### Mandatory Checklist for Both Documents
-
-* Both files must be in **Markdown (.md)** format.
-
-* Both files must be located at the **root** of your repository.
+* **Storage Location:** All persistent data is stored on the host machine at `/home/mgodawat/data/mariadb` and `/home/mgodawat/data/wordpress`.
+* **Persistence Logic:** By using Docker **Bind Mounts**, the internal container paths are mapped directly to these host folders. Even if the containers are removed or the images are pruned, the data remains on the SSD and is re-attached when the containers restart.

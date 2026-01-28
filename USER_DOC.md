@@ -1,29 +1,22 @@
 ## User Documentation
 
-This file focuses on the **operation** and **interaction** with the system.
-
 ### I. Service Overview
-
-**Description of Stack:** List the three core services (NGINX, WordPress, MariaDB) and what they provide to the end user (e.g., secure web access, content management, and data storage).
+This stack provides a complete WordPress hosting environment:
+* **NGINX:** Acts as the secure entry point, handling HTTPS traffic and SSL termination.
+* **WordPress (PHP-FPM):** The content management engine that processes the website logic.
+* **MariaDB:** The relational database that stores all posts, users, and site settings.
 
 ### II. Getting Started
-
-**How to Start the Project:** Provide the specific command to launch the infrastructure (e.g., `make`).
-
-**How to Stop the Project:** Provide the command to shut everything down cleanly (e.g., `make clean` or `make stop`).
+* **Starting the Project:** From the root directory, run `make`. This will initialize the services. Wait approximately 30 seconds for the database to boot.
+* **Stopping the Project:** Run `make down` to stop the services. To stop services and remove all temporary build files (but keep your posts), run `make clean`.
 
 ### III. Accessing the System
-
-**Website Access:** Instructions on how to reach the WordPress site via the browser using `https://<login>.42.fr`.
-
-**Administration Panel:** Instructions on how to access the WordPress admin dashboard (usually `/wp-admin`).
+* **Website Access:** Open a browser and go to `https://mgodawat.42.fr:8443`.
+* **Administration Panel:** To manage the site, access the login page at `https://mgodawat.42.fr:8443/wp-login.php`.
 
 ### IV. Credentials and Security
-
-**Managing Credentials:** Explain where the user can find their login information and how to change it if necessary.
-
-**User Roles:** Mention that there is an administrator and a regular user.
+* **Managing Credentials:** All default passwords and usernames are defined in the `.env` file at the root of the project.
+* **User Roles:** The system initializes with two users: an **Administrator** for full site control and a standard **User** with "Author" permissions.
 
 ### V. Health Checks
-
-**Service Verification:** Provide a simple way for a non-technical user to check if the "engine" is running (e.g., checking if the website loads or using a basic command to see "Up" status).
+* **Service Verification:** Run `docker compose ps`. All services should show a status of `Up` or `Running`. If the website shows a "Connection Refused" error, ensure you are using the correct port (:8443) and that NGINX has finished generating its SSL certificates.
