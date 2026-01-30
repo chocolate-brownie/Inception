@@ -19,3 +19,4 @@
 ### IV. Data Persistence and Volumes
 * **Storage Location:** All persistent data is stored on the host machine at `/home/mgodawat/data/mariadb` and `/home/mgodawat/data/wordpress`.
 * **Persistence Logic:** By using Docker **Bind Mounts**, the internal container paths are mapped directly to these host folders. Even if the containers are removed or the images are pruned, the data remains on the SSD and is re-attached when the containers restart.
+
