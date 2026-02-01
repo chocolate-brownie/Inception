@@ -28,6 +28,10 @@ google-chrome --host-resolver-rules="MAP mgodawat.42.fr 127.0.0.1" --ignore-cert
 * **Service Verification:** Run `docker compose ps`. All services should show a status of `Up` or `Running`. If the website shows a "Connection Refused" error, ensure you are using the correct port (:8443) and that NGINX has finished generating its SSL certificates.
 
 ### Accessing the System
+```
+ssh -p 8080 mgodawat@127.0.0.1
+```
+
 I have configured the project to strictly use mgodawat.42.fr as required by the subject. However, on these school stations, we do not have sudo access to edit the /etc/hosts file. To prove that my internal NGINX configuration and WordPress port settings are correct, I am using a browser flag to manually map the domain to the loopback address for this session only
 
 These are exactly the two points where an evaluator might challenge you. Since your technical implementation is otherwise perfect, they will likely focus on these "User Experience" hurdles to see if you truly understand the networking layers beneath them.
