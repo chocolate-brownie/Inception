@@ -100,9 +100,6 @@ To explain this section of the evaluation, you should focus on demonstrating you
 
 4. **Execute**: `docker compose up --build nginx`
 
-### 2. MariaDB (The Database)
-It’s great that it worked! To ensure you don't miss a step during the high-pressure evaluation, use this **step-by-step checklist**. It covers every file that needs to change and explains *why* you are doing it.
-
 ---
 
 ### 2. MariaDB Port from 3306 to 3307
