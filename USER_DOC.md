@@ -84,15 +84,15 @@ To explain this section of the evaluation, you should focus on demonstrating you
 
 **Scenario:** "Change the NGINX port from 443 to **4433**."
 
-1. **Modify `srcs/requirements/nginx/conf/nginx.conf**`:
+1. Modify `srcs/requirements/nginx/conf/nginx.conf**`:
 * Change `listen 443 ssl;` to `listen 4433 ssl;`.
 
 
-2. **Modify `srcs/requirements/nginx/Dockerfile**`:
+2. Modify `srcs/requirements/nginx/Dockerfile**`:
 * Change `EXPOSE 443` to `EXPOSE 4433`.
 
 
-3. **Modify `srcs/docker-compose.yml**`:
+3. Modify `srcs/docker-compose.yml**`:
 * Change the port mapping: `ports: - "443:4433"`.
 * *Note: By keeping the left side as 443, your browser/VirtualBox settings don't need to change!*
 
@@ -104,15 +104,13 @@ To explain this section of the evaluation, you should focus on demonstrating you
 **Scenario:** "Change the MariaDB port from 3306 to **3307**."
 *Note: This is harder because WordPress needs to know where the DB is.*
 
-1. **Modify `srcs/requirements/mariadb/conf/50-server.cnf**`:
+1. Modify `srcs/requirements/mariadb/conf/50-server.cnf**`:
 * Change `port = 3306` to `port = 3307`.
 
-
-2. **Modify `srcs/requirements/mariadb/Dockerfile**`:
+2. Modify `srcs/requirements/mariadb/Dockerfile**`:
 * Change `EXPOSE 3306` to `EXPOSE 3307`.
 
-
-3. **Modify `srcs/requirements/wordpress/tools/setup.sh**`:
+3. Modify `srcs/requirements/wordpress/tools/setup.sh**`:
 * Find where you set `dbhost`. Change it to `mariadb:3307`.
 
 
@@ -122,15 +120,13 @@ To explain this section of the evaluation, you should focus on demonstrating you
 
 **Scenario:** "Change the PHP-FPM port from 9000 to **9001**."
 
-1. **Modify `srcs/requirements/wordpress/conf/www.conf**`:
+1. Modify `srcs/requirements/wordpress/conf/www.conf**`:
 * Change `listen = 9000` to `listen = 9001`.
 
-
-2. **Modify `srcs/requirements/wordpress/Dockerfile**`:
+2. Modify `srcs/requirements/wordpress/Dockerfile**`:
 * Change `EXPOSE 9000` to `EXPOSE 9001`.
 
-
-3. **Modify `srcs/requirements/nginx/conf/nginx.conf**`:
+3. Modify `srcs/requirements/nginx/conf/nginx.conf**`:
 * This is the "Bridge." Change `fastcgi_pass wordpress:9000;` to `fastcgi_pass wordpress:9001;`.
 
 
