@@ -101,19 +101,51 @@ To explain this section of the evaluation, you should focus on demonstrating you
 4. **Execute**: `docker compose up --build nginx`
 
 ### 2. MariaDB (The Database)
+It’s great that it worked! To ensure you don't miss a step during the high-pressure evaluation, use this **step-by-step checklist**. It covers every file that needs to change and explains *why* you are doing it.
 
-**Scenario:** "Change the MariaDB port from 3306 to **3307**."
-*Note: This is harder because WordPress needs to know where the DB is.*
+---
 
-1. Modify `srcs/requirements/mariadb/conf/50-server.cnf**`:
-* Change `port = 3306` to `port = 3307`.
+### 2. MariaDB Port from 3306 to 3307
 
-2. Modify `srcs/requirements/mariadb/Dockerfile**`:
-* Change `EXPOSE 3306` to `EXPOSE 3307`.
+#### 1. Modify the Database Configuration
+The MariaDB service itself needs to know to open a different "door."
+* **File:** `srcs/requirements/mariadb/conf/50-server.cnf` 
+**Action:** Change the line `port = 3306` to **`port = 3307`**. 
 
-3. Modify `srcs/requirements/wordpress/tools/setup.sh**`:
-* Find where you set `dbhost`. Change it to `mariadb:3307`.
+#### 2. Modify the MariaDB Image Blueprint
+You must tell Docker to allow traffic through this new port.
+**File:** `srcs/requirements/mariadb/Dockerfile` 
+**Action:** Change `EXPOSE 3306` to **`EXPOSE 3307`**. 
 
+#### 3. Update the WordPress Connection Script
+
+WordPress is the "client" that connects to MariaDB. It needs two specific updates to its setup script:
+**File:** `srcs/requirements/wordpress/tools/setup.sh`
+  
+* **Action A (The Health Check):** Change the `while` loop so it pings the correct port.
+* *From:* `while ! mariadb-admin ping -h"$SQL_HOST" --silent; do`
+* *To:* `while ! mariadb-admin ping -h"mariadb" **-P3307** --silent; do`
+
+* **Action B (The Config Creation):** Tell WordPress where the database lives.
+* *From:* `--dbhost=$SQL_HOST`
+* *To:* `--dbhost=**mariadb:3307**`
+  
+#### 4. Update the Orchestration (Optional but Recommended)
+If you want to keep your environment variables clean:
+**File:** `srcs/.env` 
+**Action:** Set `SQL_HOST=mariadb:3307`. 
+
+### The "Reset & Verify" Protocol
+
+You cannot just restart the containers; you must wipe the old configuration because WordPress saves the database port in a file (`wp-config.php`) that only gets created once.
+
+1. **Nuclear Clean:** Run **`make fclean`** to delete old volumes. 
+2. **Rebuild All:** Run **`make`** to build the new images and start the services. 
+3. **The "Proof of Life" Logs:**
+* Run `docker compose logs -f wordpress`. 
+* **Success sign:** You should see `"WordPress: MariaDB is up and running!"` and then `"WordPress: Installation completed successfully!"`
+4. **The Browser Test:** Refresh `https://mgodawat.42.fr:8443`. 
+---
 
 4. **Execute**: Since the DB settings are baked into the WordPress config, you might need `make re` (or manually update `wp-config.php` inside the container).
 
