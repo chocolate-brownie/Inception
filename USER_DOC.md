@@ -121,11 +121,11 @@ WordPress is the "client" that connects to MariaDB. It needs two specific update
   
 * **Action A (The Health Check):** Change the `while` loop so it pings the correct port.
 * *From:* `while ! mariadb-admin ping -h"$SQL_HOST" --silent; do`
-* *To:* `while ! mariadb-admin ping -h"mariadb" **-P3307** --silent; do`
+* *To:* `while ! mariadb-admin ping -h"mariadb" -P3307 --silent; do`
 
 * **Action B (The Config Creation):** Tell WordPress where the database lives.
 * *From:* `--dbhost=$SQL_HOST`
-* *To:* `--dbhost=**mariadb:3307**`
+* *To:* `--dbhost=mariadb:3307`
   
 #### 4. Update the Orchestration (Optional but Recommended)
 If you want to keep your environment variables clean:
@@ -141,10 +141,9 @@ You cannot just restart the containers; you must wipe the old configuration beca
 3. **The "Proof of Life" Logs:**
 * Run `docker compose logs -f wordpress`. 
 * **Success sign:** You should see `"WordPress: MariaDB is up and running!"` and then `"WordPress: Installation completed successfully!"`
-4. **The Browser Test:** Refresh `https://mgodawat.42.fr:8443`. 
----
+4.**The Browser Test:** Refresh `https://mgodawat.42.fr:8443`. 
 
-4. **Execute**: Since the DB settings are baked into the WordPress config, you might need `make re` (or manually update `wp-config.php` inside the container).
+---
 
 ### 3. WordPress / PHP-FPM (The Processor)
 
