@@ -27,6 +27,8 @@ google-chrome --host-resolver-rules="MAP mgodawat.42.fr 127.0.0.1" --ignore-cert
 ### V. Health Checks
 * **Service Verification:** Run `docker compose ps`. All services should show a status of `Up` or `Running`. If the website shows a "Connection Refused" error, ensure you are using the correct port (:8443) and that NGINX has finished generating its SSL certificates.
 
+---
+
 ### Accessing the System
 ```
 ssh -p 8080 mgodawat@127.0.0.1
@@ -56,6 +58,8 @@ Here are your definitive, "evaluator-ready" justifications for each:
 
 To explain this section of the evaluation, you should focus on demonstrating your **MariaDB container’s isolation**, **volume mapping**, and **security configuration**.
 
+---
+
 ### MariaDB Dockerfile and Status
 
 ## Database Security (Root Access)
@@ -73,3 +77,65 @@ To explain this section of the evaluation, you should focus on demonstrating you
 
 
 * **The Proof**: The list of tables (like `wp_posts`, `wp_users`) proves that the database is not empty and has been correctly populated by the WordPress installation.
+
+---
+
+### 1. NGINX (The Most Common Choice)
+
+**Scenario:** "Change the NGINX port from 443 to **4433**."
+
+1. **Modify `srcs/requirements/nginx/conf/nginx.conf**`:
+* Change `listen 443 ssl;` to `listen 4433 ssl;`.
+
+
+2. **Modify `srcs/requirements/nginx/Dockerfile**`:
+* Change `EXPOSE 443` to `EXPOSE 4433`.
+
+
+3. **Modify `srcs/docker-compose.yml**`:
+* Change the port mapping: `ports: - "443:4433"`.
+* *Note: By keeping the left side as 443, your browser/VirtualBox settings don't need to change!*
+
+
+4. **Execute**: `docker compose up --build nginx`
+
+### 2. MariaDB (The Database)
+
+**Scenario:** "Change the MariaDB port from 3306 to **3307**."
+*Note: This is harder because WordPress needs to know where the DB is.*
+
+1. **Modify `srcs/requirements/mariadb/conf/50-server.cnf**`:
+* Change `port = 3306` to `port = 3307`.
+
+
+2. **Modify `srcs/requirements/mariadb/Dockerfile**`:
+* Change `EXPOSE 3306` to `EXPOSE 3307`.
+
+
+3. **Modify `srcs/requirements/wordpress/tools/setup.sh**`:
+* Find where you set `dbhost`. Change it to `mariadb:3307`.
+
+
+4. **Execute**: Since the DB settings are baked into the WordPress config, you might need `make re` (or manually update `wp-config.php` inside the container).
+
+### 3. WordPress / PHP-FPM (The Processor)
+
+**Scenario:** "Change the PHP-FPM port from 9000 to **9001**."
+
+1. **Modify `srcs/requirements/wordpress/conf/www.conf**`:
+* Change `listen = 9000` to `listen = 9001`.
+
+
+2. **Modify `srcs/requirements/wordpress/Dockerfile**`:
+* Change `EXPOSE 9000` to `EXPOSE 9001`.
+
+
+3. **Modify `srcs/requirements/nginx/conf/nginx.conf**`:
+* This is the "Bridge." Change `fastcgi_pass wordpress:9000;` to `fastcgi_pass wordpress:9001;`.
+
+
+4. **Execute**: `docker compose up --build wordpress nginx`
+
+1. Run `docker compose ps` to show the new port mapping.
+2. Run `docker compose logs` to show the service started successfully on the new port.
+3. Refresh the website to show it still loads.
