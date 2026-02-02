@@ -74,6 +74,7 @@ To explain this section of the evaluation, you should focus on demonstrating you
 * `SHOW DATABASES;` (Should show `inception_db`).
 * `USE inception_db;`
 * `SHOW TABLES;`.
+* `SELECT user_login, user_email FROM wp_users;`
 
 
 * **The Proof**: The list of tables (like `wp_posts`, `wp_users`) proves that the database is not empty and has been correctly populated by the WordPress installation.
