@@ -53,3 +53,23 @@ Here are your definitive, "evaluator-ready" justifications for each:
 **Correct Internal Implementation**: "However, I have strictly followed the mandatory requirement **inside the infrastructure**. My NGINX container is listening on the standard port **443**, my `docker-compose.yml` maps the VM's port 443 to the container's 443, and I am using **TLS v1.2/v1.3** as required".
 
 **The Bridge Explanation**: "The `:8443` you see in the browser is simply the 'entrance' on the host computer. Once the traffic enters the VM, it follows a standard path: **Host:8443 → VM:443 → Container:443**".
+
+To explain this section of the evaluation, you should focus on demonstrating your **MariaDB container’s isolation**, **volume mapping**, and **security configuration**.
+
+### MariaDB Dockerfile and Status
+
+## Database Security (Root Access)
+
+* **The Security Test**: The evaluator will attempt to log in as root without a password. To demonstrate this, you can run `docker exec -it mariadb mysql -u root` inside the container. This **must fail** with an "Access denied" error.
+* **The Explanation**: Show your `srcs/requirements/mariadb/tools/setup.sh` script. Point to the line: `ALTER USER 'root'@'localhost' IDENTIFIED BY '${SQL_ROOT_PASSWORD}';`. Explain that your script explicitly secures the root account during initialization, preventing any passwordless access.
+
+## User Access and Data Persistence
+
+* **User Login**: Demonstrate logging in with your standard user account: `docker exec -it mariadb mysql -u <WP_USER> -p`. Use the password defined in your `.env` file.
+* **Data Verification**: Once logged in, run the following SQL commands:
+* `SHOW DATABASES;` (Should show `inception_db`).
+* `USE inception_db;`
+* `SHOW TABLES;`.
+
+
+* **The Proof**: The list of tables (like `wp_posts`, `wp_users`) proves that the database is not empty and has been correctly populated by the WordPress installation.
